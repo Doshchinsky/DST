@@ -1,0 +1,13 @@
+$TTL 300 ; 5 minutes
+@	IN	SOA dns-2.mag.local admin.mag.local. (
+	2019082302; Serial
+	300 ; Refresh 5 minutes
+	14400 ; Retry 4 hour
+	2592000 ; Expire 30 days
+	345600 ) ; Minimum 4 days
+archie.xn--p1ai. IN NS dns-1.mag.local.
+archie.xn--p1ai. IN NS dns-2.mag.local.
+
+mg2019s07		IN	A 10.142.14.1
+xn--dns--j4dr3a9bk5i IN	A	10.142.14.2
+xn--dns--j4d6b8aars.archie.xn--p1ai.	IN	A	10.142.14.3
