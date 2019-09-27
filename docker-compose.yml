@@ -1,0 +1,76 @@
+version: '2'
+services:
+  dns-1:
+    build: ./dns/bind-1
+    restart: always
+    ports:
+      - "50053:53/tcp"
+      - "50053:53/udp"
+    volumes:
+      - "./dns/bind-1/conf:/etc/bind"
+      - "./dns/bind-1/resolv.conf:/etc/resolv.conf"
+      - "./dns/rsyncd.conf:/etc/rsyncd.conf"
+      - "./dns/rsyncd.secrets:/etc/rsyncd.secrets"
+    networks:
+      network_1:
+        ipv4_address: 10.142.14.2
+        ipv6_address: 2001:db8:1234::2
+
+  dns-2:
+    build: ./dns/bind-2
+    depends_on:
+      - dns-1
+    restart: always
+    ports:
+      - "50153:53/tcp"
+      - "50153:53/udp"
+    volumes:
+      - "./dns/bind-2/conf:/etc/bind"
+      - "./dns/bind-2/resolv.conf:/etc/resolv.conf"
+      - "./dns/rsyncd.conf:/etc/rsyncd.conf"
+      - "./dns/rsyncd.secrets:/etc/rsyncd.secrets"
+    networks:
+      network_1:
+        ipv4_address: 10.142.14.3
+        ipv6_address: 2001:db8:1234::3
+
+  ldap:
+    build: ./ldap/
+    restart: always
+    ports:
+      - "50389:389/tcp"
+      - "50389:389/udp"
+    volumes:
+      - "./ldap/conf:/etc/ldap/"
+      - "./ldap/lib:/var/lib/ldap/"
+      - "./ldap/resolv.conf:/etc/resolv.conf"
+    networks:
+      network_1:
+        ipv4_address: 10.142.14.4
+        ipv6_address: 2001:db8:1234::4
+
+  test:
+    build: ./test/
+    restart: always
+    ports:
+      - "50122:22/tcp"
+    volumes:
+      - "./test/resolv.conf:/etc/resolv.conf"
+      - "./test/clientconfig/pam.d:/etc/pam.d"
+    networks:
+      network_1:
+        ipv4_address: 10.142.14.254
+        ipv6_address: 2001:db8:1234::254
+
+networks:
+  network_1:
+    driver: bridge
+    driver_opts:
+      com.docker.network.enable_ipv6: "true"
+    ipam:
+      driver: default
+      config:
+      - subnet: 10.142.14.0/24
+        gateway: 10.142.14.1
+      - subnet: 2001:db8:1234::/64
+        gateway: 2001:db8:1234::1
