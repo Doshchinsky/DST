@@ -1,0 +1,224 @@
+version: "2.1"
+services:
+  dns-1:
+    build: ./dns/bind-1
+    restart: always
+    ports:
+      - "50053:53/tcp"
+      - "50053:53/udp"
+    volumes:
+      - "./dns/bind-1/conf:/etc/bind"
+      - "./dns/bind-1/resolv.conf:/etc/resolv.conf"
+      - "./dns/rsyncd.conf:/etc/rsyncd.conf"
+      - "./dns/rsyncd.secrets:/etc/rsyncd.secrets"
+      - "./ntp.conf:/etc/ntp.conf"
+      - "./timezone:/etc/timezone"
+      - "./localtime:/etc/localtime"
+    networks:
+      network_1:
+        ipv4_address: 10.142.14.2
+        ipv6_address: 2001:db8:1234::2
+
+  dns-2:
+    build: ./dns/bind-2
+    depends_on:
+      - dns-1
+    restart: always
+    ports:
+      - "50153:53/tcp"
+      - "50153:53/udp"
+    volumes:
+      - "./dns/bind-2/conf:/etc/bind"
+      - "./dns/bind-2/resolv.conf:/etc/resolv.conf"
+      - "./dns/rsyncd.conf:/etc/rsyncd.conf"
+      - "./dns/rsyncd.secrets:/etc/rsyncd.secrets"
+      - "./ntp.conf:/etc/ntp.conf"
+      - "./timezone:/etc/timezone"
+      - "./localtime:/etc/localtime"
+    networks:
+      network_1:
+        ipv4_address: 10.142.14.3
+        ipv6_address: 2001:db8:1234::3
+
+  ldap:
+    build: ./ldap/
+    restart: always
+    ports:
+      - "50389:389/tcp"
+      - "50389:389/udp"
+    volumes:
+      - "./ldap/conf:/etc/ldap/"
+      - "./ldap/lib:/var/lib/ldap/"
+      - "./ldap/resolv.conf:/etc/resolv.conf"
+      - "./ntp.conf:/etc/ntp.conf"
+      - "./timezone:/etc/timezone"
+      - "./localtime:/etc/localtime"
+    networks:
+      network_1:
+        ipv4_address: 10.142.14.4
+        ipv6_address: 2001:db8:1234::4
+
+  test:
+    build: ./test/
+    restart: always
+    ports:
+      - "50122:22/tcp"
+    volumes:
+      - "./test/resolv.conf:/etc/resolv.conf"
+      - "./test/clientconfig/pam.d:/etc/pam.d"
+      - "./ntp.conf:/etc/ntp.conf"
+      - "./timezone:/etc/timezone"
+      - "./localtime:/etc/localtime"
+    networks:
+      network_1:
+        ipv4_address: 10.142.14.254
+        ipv6_address: 2001:db8:1234::254
+
+  ntp-1:
+    build: ./ntp/ntp-1/
+    restart: always
+    ports:
+      - "50123:123/tcp"
+      - "50123:123/udp"
+    volumes:
+      - "./ntp/ntp-1/etc/ntp.conf:/etc/ntp.conf"
+      - "./ntp/ntp-1/etc/ntpdrift.dat:/etc/ntpdrift.dat"
+      - "./timezone:/etc/timezone"
+      - "./ntp/ntp-1/resolv.conf:/etc/resolv.conf"
+    networks:
+      network_1:
+        ipv4_address: 10.142.14.5
+        ipv6_address: 2001:db8:1234::5
+
+  ntp-2:
+    build: ./ntp/ntp-2/
+    restart: always
+    ports:
+      - "51123:123/tcp"
+      - "51123:123/udp"
+    volumes:
+      - "./ntp/ntp-2/etc/ntp.conf:/etc/ntp.conf"
+      - "./ntp/ntp-2/etc/ntpdrift.dat:/etc/ntpdrift.dat"
+      - "./timezone:/etc/timezone"
+      - "./ntp/ntp-2/resolv.conf:/etc/resolv.conf"
+    networks:
+      network_1:
+        ipv4_address: 10.142.14.6
+        ipv6_address: 2001:db8:1234::6
+
+  sql-1:
+    build: ./db/sql-1/
+    restart: always
+    volumes:
+      - "./db/sql-1/etc/mysql:/etc/mysql"
+      - "./db/sql-1/var/lib/mysql:/var/lib/mysql"
+      - "./ntp.conf:/etc/ntp.conf"
+      - "./db/resolv.conf:/etc/resolv.conf"
+      - "./db/sql-1/var/log/mysql:/var/log/mysql"
+    networks:
+      network_1:
+        ipv4_address: 10.142.14.7
+        ipv6_address: 2001:db8:1234::7
+      network_2:
+        ipv4_address: 10.142.15.2
+
+  sql-2:
+    build: ./db/sql-2/
+    restart: always
+    volumes:
+      - "./db/sql-2/etc/mysql:/etc/mysql"
+      - "./db/sql-2/var/lib/mysql:/var/lib/mysql"
+      - "./ntp.conf:/etc/ntp.conf"
+      - "./db/resolv.conf:/etc/resolv.conf"
+      - "./db/sql-2/var/log/mysql:/var/log/mysql"
+    networks:
+      network_1:
+        ipv4_address: 10.142.14.8
+        ipv6_address: 2001:db8:1234::8
+      network_2:
+        ipv4_address: 10.142.15.3
+
+  nginx-1:
+    build: ./nginx/nginx-1/
+    restart: always
+    ports:
+      - "50080:80/tcp"
+    volumes:
+      - "./nginx/nginx-1/html:/var/www/html"
+      - "./nginx/nginx-1/default.conf:/etc/nginx/conf.d/default.conf"
+      - "./nginx/nginx-1/default:/etc/nginx/sites-available/default"
+    networks:
+      network_1:
+        ipv4_address: 10.142.14.9
+        ipv6_address: 2001:db8:1234::9
+
+  nginx-2:
+    build: ./nginx/nginx-2/
+    restart: always
+    ports:
+      - "50180:80/tcp"
+    volumes:
+      - "./nginx/nginx-2/html:/var/www/html"
+      - "./nginx/nginx-2/default.conf:/etc/nginx/conf.d/default.conf"
+      - "./nginx/nginx-2/default:/etc/nginx/sites-available/default"
+    networks:
+      network_1:
+        ipv4_address: 10.142.14.10
+        ipv6_address: 2001:db8:1234::10
+
+  nginx-3:
+    build: ./nginx/nginx-3/
+    restart: always
+    ports:
+      - "80:80/tcp"
+    volumes:
+      - "./nginx/nginx-3/default:/etc/nginx/sites-available/default"
+    networks:
+      network_1:
+        ipv4_address: 10.142.14.13
+        ipv6_address: 2001:db8:1234::13
+
+  php-1:
+    build: ./php/php-1/
+    restart: always
+    volumes:
+      - "./nginx/nginx-1/html:/var/www/html"
+      - "./php/php-1/www.conf:/etc/php/7.3/fpm/pool.d/www.conf"
+      - "./php/php-1/php-fpm.conf:/etc/php/7.3/fpm/php-fpm.conf"
+    networks:
+      network_1:
+        ipv4_address: 10.142.14.11
+        ipv6_address: 2001:db8:1234::11
+
+  php-2:
+    build: ./php/php-2/
+    restart: always
+    volumes:
+      - "./nginx/nginx-2/html:/var/www/html"
+      - "./php/php-2/www.conf:/etc/php/7.3/fpm/pool.d/www.conf"
+      - "./php/php-2/php-fpm.conf:/etc/php/7.3/fpm/php-fpm.conf"
+    networks:
+      network_1:
+        ipv4_address: 10.142.14.12
+        ipv6_address: 2001:db8:1234::12
+
+networks:
+  network_1:
+    enable_ipv6: true
+    driver: bridge
+    driver_opts:
+      com.docker.network.enable_ipv6: "true"
+    ipam:
+      driver: default
+      config:
+      - subnet: 10.142.14.0/24
+        gateway: 10.142.14.1
+      - subnet: 2001:db8:1234::/64
+        gateway: 2001:db8:1234::1
+  network_2:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+      - subnet: 10.142.15.0/24
+        gateway: 10.142.15.1

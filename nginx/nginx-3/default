@@ -1,0 +1,15 @@
+upstream balancer {
+  server 10.142.14.9 weight=1 max_fails=1 fail_timeout=5s;
+	server 10.142.14.10 weight=1 max_fails=1 fail_timeout=5s;
+}
+
+server {
+	listen 80 default_server;
+	listen [::]:80 default_server;
+
+	server_name _;
+
+	location / {
+    proxy_pass http://balancer;
+	}
+}

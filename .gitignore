@@ -1,0 +1,4 @@
+.ftpconfig
+ldap/lib
+ldap/conf
+db/sql-*/var

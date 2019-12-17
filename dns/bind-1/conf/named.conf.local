@@ -1,0 +1,31 @@
+zone "mag.local" {
+	file "/etc/bind/mag.local";
+	type master;
+};
+
+zone "mag2.local" {
+        file "/etc/bind/mag2.local";
+        type master;
+};
+
+zone "14.142.10.in-addr.arpa" {
+  file "/etc/bind/14.142.10.in-addr.arpa";
+	type master;
+};
+
+zone "archie.xn--p1ai" {
+  file "archie.xn--p1ai";
+	type slave;
+  masters { 10.142.14.3; };
+};
+
+zone "0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.4.3.2.1.8.b.d.0.1.0.0.2.ip6.arpa" {
+	file "0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.4.3.2.1.8.b.d.0.1.0.0.2.ip6.arpa";
+	type slave;
+	masters { 10.142.14.3; };
+};
+
+zone "archie.local" {
+	file "/etc/bind/archie.local";
+	type master;
+};
