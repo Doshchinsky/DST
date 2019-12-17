@@ -1,0 +1,36 @@
+@import "http://fonts.googleapis.com/css?family=Droid+Serif";
+/* The Above Line Is To Import Google Font Style */
+.container {
+  margin:10px auto;
+  width:300px;
+  height:200px;
+  padding-top:10px;
+  font-family:'Droid Serif',serif;
+  font-size:24px
+  clear: both;
+}
+
+.container input {
+  width: 100%;
+  clear: both;
+}
+
+.dbtable {
+  margin:10px auto;
+  width:500px;
+  height:200px;
+  padding-left:20px;
+  padding-top:10px;
+  font-family:'Droid Serif',serif;
+  font-size:24px
+  clear: both;
+}
+
+p {
+  color:red;
+  text-align:center
+}
+span {
+  text-align:center;
+  color:green
+}
