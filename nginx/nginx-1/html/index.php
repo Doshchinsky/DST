@@ -55,16 +55,19 @@
       $database = "test_replic";
       $mysqli = new mysqli("10.142.14.7", $username, $password, $database);
       $date = date('Y-m-d');
-      $field1 = $mysqli->real_escape_string($_POST['id']);
-      $field2 = $mysqli->real_escape_string($_POST['name']);
-      $field3 = $mysqli->real_escape_string("1");
+      if ($_POST) {
+        $field1 = $mysqli->real_escape_string($_POST['id']);
+        $field2 = $mysqli->real_escape_string($_POST['name']);
+        $field3 = $mysqli->real_escape_string("1");
 
-      $query = "INSERT INTO book_order ( ID, Name, STATUS, DATE )
-                  VALUES ('{$field1}','{$field2}', '{$field3}','$date')";
+        $query = "INSERT INTO book_order ( ID, Name, STATUS, DATE )
+                    VALUES ('{$field1}','{$field2}', '{$field3}','$date')";
 
-      $mysqli->query($query);
-      $mysqli->close();
-      // header("location: /");
+        $mysqli->query($query);
+        $mysqli->close();
+        header("Location: /index.php");
+        exit;
+      }
     ?>
   </body>
 </html>

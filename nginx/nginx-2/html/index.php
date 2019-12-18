@@ -1,6 +1,6 @@
 <html>
   <head>
-    <title>2 PHP with SQL</title>
+    <title>1 PHP with SQL</title>
     <link href="customization.css" rel="stylesheet">
   </head>
   <body>
@@ -8,7 +8,7 @@
       $username = "trader";
       $password = "1234";
       $database = "test_replic";
-      $mysqli = new mysqli("10.142.14.7", $username, $password, $database);
+      $mysqli = new mysqli("10.142.14.8", $username, $password, $database);
       $query = "SELECT * FROM book_order";
 
       echo '<div class="dbtable" align="center">
@@ -53,17 +53,21 @@
       $username = "trader";
       $password = "1234";
       $database = "test_replic";
-      $mysqli = new mysqli("10.142.14.7", $username, $password, $database);
+      $mysqli = new mysqli("10.142.14.8", $username, $password, $database);
       $date = date('Y-m-d');
-      $field1 = $mysqli->real_escape_string($_POST['id']);
-      $field2 = $mysqli->real_escape_string($_POST['name']);
-      $field3 = $mysqli->real_escape_string("1");
+      if ($_POST) {
+        $field1 = $mysqli->real_escape_string($_POST['id']);
+        $field2 = $mysqli->real_escape_string($_POST['name']);
+        $field3 = $mysqli->real_escape_string("1");
 
-      $query = "INSERT INTO book_order ( ID, Name, STATUS, DATE )
-                  VALUES ('{$field1}','{$field2}', '{$field3}','$date')";
+        $query = "INSERT INTO book_order ( ID, Name, STATUS, DATE )
+                    VALUES ('{$field1}','{$field2}', '{$field3}','$date')";
 
-      $mysqli->query($query);
-      $mysqli->close();
+        $mysqli->query($query);
+        $mysqli->close();
+        header("Location: /index.php");
+        exit;
+      }
     ?>
   </body>
 </html>
