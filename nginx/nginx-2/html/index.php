@@ -1,12 +1,12 @@
 <html>
   <head>
-    <title>1 PHP with SQL</title>
+    <title>2 PHP with SQL</title>
     <link href="customization.css" rel="stylesheet">
   </head>
   <body>
     <?php
-      $username = "trader";
-      $password = "1234";
+      $username = "replicator";
+      $password = "password";
       $database = "test_replic";
       $mysqli = new mysqli("10.142.14.8", $username, $password, $database);
       $query = "SELECT * FROM book_order";
@@ -50,8 +50,8 @@
     </div>
     <br><br><br><br>
     <?php
-      $username = "trader";
-      $password = "1234";
+      $username = "replicator";
+      $password = "password";
       $database = "test_replic";
       $mysqli = new mysqli("10.142.14.8", $username, $password, $database);
       $date = date('Y-m-d');

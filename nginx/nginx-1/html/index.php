@@ -5,8 +5,8 @@
   </head>
   <body>
     <?php
-      $username = "trader";
-      $password = "1234";
+      $username = "replicator";
+      $password = "password";
       $database = "test_replic";
       $mysqli = new mysqli("10.142.14.7", $username, $password, $database);
       $query = "SELECT * FROM book_order";
@@ -50,8 +50,8 @@
     </div>
     <br><br><br><br>
     <?php
-      $username = "trader";
-      $password = "1234";
+      $username = "replicator";
+      $password = "password";
       $database = "test_replic";
       $mysqli = new mysqli("10.142.14.7", $username, $password, $database);
       $date = date('Y-m-d');
